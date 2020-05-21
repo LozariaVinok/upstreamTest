@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class ShoppingListItem(
     @PrimaryKey(autoGenerate = true) val shoppingListItemId: Int = 0,
-    var productItemId: Int = 0,
+    var productItemId: Long = 0,
     @ColumnInfo var isChecked: Boolean = false
 
 )

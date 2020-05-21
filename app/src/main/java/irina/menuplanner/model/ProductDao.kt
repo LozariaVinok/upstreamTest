@@ -11,6 +11,9 @@ interface ProductDao {
     suspend fun insert(product: Product): Long
 
     @Query("UPDATE product SET name =:name WHERE productId = :productId")
-    suspend fun updateName(productId: Int, name: String)
+    suspend fun updateName(productId: Long, name: String)
+
+    @Query("SELECT * FROM product WHERE productId = :id")
+    fun getProduct(id: Long): Product
 
 }

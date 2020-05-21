@@ -1,26 +1,27 @@
 package irina.menuplanner.ui.shoppinglist
 
 import androidx.databinding.Bindable
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import irina.menuplanner.BR
-import irina.menuplanner.model.Repository
+import irina.menuplanner.model.IRepository
 import irina.menuplanner.model.ShoppingListProductItem
 import irina.menuplanner.ui.base.ObservableViewModel
 import kotlinx.coroutines.launch
 
 
-class ShoppingListViewModel(private val repository: Repository) : ObservableViewModel() {
+class ShoppingListViewModel(private val repository: IRepository) : ObservableViewModel() {
     val shoppingList: LiveData<List<ShoppingListProductItem>> = repository.getShoppingList()
 
     @Bindable
-    var selectedItemId = -1
+    var selectedItemId: Long = -1
         set(value) {
             field = value
             notifyPropertyChanged(BR.selectedItemId)
         }
 
     @Bindable
-    private var selectedItemProductId = -1
+    var selectedItemProductId: Long = -1
         set(value) {
             field = value
             notifyPropertyChanged(BR.selectedItemProductId)
@@ -37,25 +38,25 @@ class ShoppingListViewModel(private val repository: Repository) : ObservableView
         }
 
 
-    fun onDeleteButtonClicked(id: Int) = viewModelScope.launch {
+    fun onDeleteButtonClicked(id: Long) = viewModelScope.launch {
         repository.deleteShoppingListItem(id)
     }
 
     fun onNewItemClicked() = viewModelScope.launch {
-        repository.addShoppingListItem()
+        val id = repository.addShoppingListItem()
     }
 
     fun onItemClicked(
-        shoppingListItemId: Int,
+        shoppingListItemId: Long,
         shoppingListProductName: String,
-        shoppingListItemProductId: Int
+        shoppingListItemProductId: Long
     ) {
         selectedItemId = shoppingListItemId
         selectedItemProductId = shoppingListItemProductId
         selectedItemName = shoppingListProductName
     }
 
-    fun onItemChecked(shoppingListItemId: Int, checked: Boolean) = viewModelScope.launch {
+    fun onItemChecked(shoppingListItemId: Long, checked: Boolean) = viewModelScope.launch {
         repository.changeCheckedInShoppingList(shoppingListItemId, checked)
     }
 

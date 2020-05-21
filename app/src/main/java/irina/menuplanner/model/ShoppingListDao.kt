@@ -13,12 +13,15 @@ interface ShoppingListDao {
     fun getShoppingList(): LiveData<List<ShoppingListProductItem>>
 
     @Insert
-    suspend fun insertItem(item: ShoppingListItem)
+    suspend fun insertItem(item: ShoppingListItem): Long
 
     @Query("UPDATE ShoppingListItem SET isChecked = :checked WHERE shoppingListItemId = :id")
-    suspend fun updateItem(id: Int, checked: Boolean)
+    suspend fun updateItem(id: Long, checked: Boolean)
 
     @Query("DELETE FROM ShoppingListItem WHERE shoppingListItemId = :id")
-    suspend fun deleteItem(id: Int)
+    suspend fun deleteItem(id: Long)
+
+    @Query("SELECT * FROM ShoppingListItem WHERE shoppingListItemId = :id")
+    fun getItem(id: Long): ShoppingListItem
 
 }
